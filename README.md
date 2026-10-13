@@ -46,59 +46,102 @@ Requires macOS 14 Sonoma or later. One universal app for Apple silicon and Intel
 
 ## Everything it does
 
+Thirty tools in eight groups. Each one is a switch on the **Tools** tab, and each can be removed entirely on the **Features** page.
+
 ### Keep the Mac fast
-- **One-click optimize.** Finds runaway processes and heavy apps and stops them safely, with a report of what came back.
-- **Cleanup intensity dial** and **auto-optimize** when load stays above your threshold.
-- **Processes.** The heaviest apps and background processes, with "stop now" and "never touch".
-- **Cleaner** for caches, logs, Xcode builds and app leftovers, on demand or weekly. **Uninstaller** that removes apps with their traces.
-- **Sensors.** Temperatures, GPU load, power draw in watts, the most energy-hungry apps and fan speed with manual control.
-- **Network.** Live traffic, session totals, local IP and Apple's speed test.
-- **Menu bar readouts** for CPU, memory, GPU, network, temperature, fan, power and battery — as numbers or bars.
+- **One-click optimize.** The animated button finds runaway processes and heavy apps and stops them safely, then shows a report: what was stopped, how much memory came back and what restarted on its own.
+- **Cleanup intensity dial** from gentle to aggressive, and **auto-optimize** when the load stays above your threshold.
+- **Processes.** The heaviest apps and background processes right now, with "stop now" and "never touch". Idle third-party apps are listed separately.
+- **Cleaner** for caches, logs (`~/Library/Logs`), Xcode builds, old downloads and leftovers of removed apps, on demand or quietly once a week. Everything goes to the Trash, so it can be restored.
+- **Uninstaller.** Search for an app and remove it together with the preferences, caches and containers it left behind.
+- **Sensors.** Chip and SoC temperatures, every sensor on demand, GPU load, whole-system power draw in watts, the apps using the most energy (macOS Energy Impact) and fan speed in RPM with a manual mode. Fan changes go through macOS's administrator prompt; passively cooled Macs say so.
+- **Network.** Live download and upload, totals for this session, local IP and Apple's built-in speed test with responsiveness under load.
+- **Menu bar readouts** for CPU, memory, GPU, network, temperature, fan, power and battery: as numbers or bars, with text beside the icon and an optional shimmer.
 - **Alerts** for sustained CPU load, memory pressure, low disk, low battery and overheating.
-- **Updates** from Homebrew, the App Store and apps' own update feeds. **Messenger downloads** from Telegram, WhatsApp, Viber and WeChat with a retention rule.
+- **Updates** in one list: Homebrew formulae and casks (search and install by name), App Store updates through `mas`, and apps that update themselves through their own Sparkle feeds.
+- **Messenger downloads** from Telegram, WhatsApp, Viber and WeChat: see the size, move old files to the Trash, sort the rest into folders, or clear them weekly.
 
 ### Sound
-- **Volume mixer.** Volume per app, boost past 100%, a different output per app, favorites in your order.
-- **Outputs and microphones.** Switch outputs with a shortcut, lower the volume when headphones disconnect, keep a preferred microphone, set its level and mute every mic at once.
-- **Music launch blocker** for the Play key.
+- **Volume mixer.** Volume per app, boost past 100%, a different output device per app and favorites pinned in your order.
+- **Outputs.** Next output with ⌃⌥⌘O, a preferred device Lumo switches back to whenever it is connected, and a quieter volume when headphones disconnect so speakers don't blast the room.
+- **Microphones.** Keep a preferred microphone, set its input level and mute every mic at once with ⌃⌥⌘M — one press for calls.
+- **Music launch blocker.** ▶︎ on the keyboard or headphones no longer opens Music when nothing is playing; Lumo counts how many launches it stopped.
 
 ### Windows and the Dock
-- **Window layout.** Halves, quarters, thirds and more with shortcuts, edge snapping, ⌃⌥-drag to move and ⌃⌥⇧-drag to resize from anywhere.
-- **App switcher** for ⌘Tab with live previews, search, one tile per window and a this-display filter.
-- **Dock previews** on hover, **Dock clicks** that minimize, hide or cycle windows, a **green button** that fills the screen without a new Space, a **fixed Spaces order** and **quit when the last window closes**.
-- **⌘Q / ⌘W protection** by holding or pressing twice.
+- **Window layout.** Halves, quarters, thirds, maximize, center, restore and move to the next display with ⌃⌥ shortcuts; drag a window to an edge or corner to snap it; ⌃⌥-drag moves a window from anywhere inside it and ⌃⌥⇧-drag resizes it.
+- **App switcher** that replaces ⌘Tab: big live previews, search by name, one tile per window, arrows to move, Q to quit the selected app and a "this display only" filter.
+- **Dock previews** of every window on hover, with switch, close and snap — windows from every desktop included.
+- **Dock clicks.** Clicking the active app's icon minimizes its windows, hides the app or cycles through its windows.
+- **Green button** fills the screen without creating a new Space; **Spaces keep their order** instead of rearranging by use; **quit when the last window closes** for apps you choose.
+- **⌘Q / ⌘W protection.** Hold or press twice to quit apps or close windows and tabs, with a list of apps to leave alone.
 
 ### Keyboard and mouse
-- **Smooth, linear and sideways scrolling**, reversed mouse scrolling, no pointer acceleration.
-- **Mouse buttons and side wheels** mapped to actions, **middle-button gestures** for Spaces and Mission Control, **three-finger middle click**.
-- **Focus follows mouse**, an **extra click filter** for worn buttons, **key debounce**, a **Super key** on Caps Lock or a right-hand modifier, and per-app exclusions.
-- **Shortcuts page** to rebind every Lumo shortcut, with optional takeover of ⌘⇧3/4/5.
+- **Scrolling.** Smooth scrolling that glides like a trackpad, linear scrolling with a fixed number of lines per notch, sideways scrolling while holding a key, reversed mouse scrolling (the trackpad stays as is) and no pointer acceleration.
+- **Mouse buttons.** Back and forward on buttons 4 and 5, actions on the middle button and on wheel tilt, middle-button gestures for Spaces and Mission Control, and a three-finger trackpad press as a middle click.
+- **Focus follows mouse.** The window under the pointer comes forward after a short pause.
+- **Extra click filter** for worn mouse buttons and **key debounce** that filters doubled letters.
+- **Super key.** Caps Lock or a right-hand modifier acts as ⌃⌥⇧⌘ when held, and as its own key when tapped alone, with per-app exclusions.
+- **Shortcuts page.** Every Lumo shortcut in one place, rebindable and resettable, plus an optional takeover of ⌘⇧3/4/5 for Lumo's own capture tools.
 
 ### Clipboard, files and links
-- **Clipboard history** with search and pins, **auto-clear**, **paste as plain text** and **snippets**.
-- **Shelf** for files, text and links — shake the pointer while dragging, or drop onto the notch.
-- **Clean links** of tracking parameters, **Finder shortcuts** (⌘X/⌘V move, F2 rename, paste an image as PNG) and a **disk image installer**.
+- **Clipboard history** with search, pins, a ⇧⌘V panel that pastes straight into the app, a retention limit and **auto-clear** after a delay, on lock or on sleep.
+- **Paste as plain text** with ⌥⇧⌘V; the original clipboard is put back afterwards.
+- **Snippets.** Type a shortcut such as `;addr` in any app and it expands; `{date}`, `{time}` and `{clipboard}` are filled in.
+- **Shelf** for files, text and links: shake the pointer while dragging, press ⌃⌥⌘S, or drop onto the notch.
+- **Clean links.** Copied links lose `utm_`, `fbclid`, `gclid`, `si` and other tracking tags automatically, with a counter.
+- **Finder shortcuts.** ⌘X then ⌘V moves files, F2 renames, and ⌘V pastes an image from the clipboard as a PNG file.
+- **Disk image installer.** When a mounted DMG contains an app, Lumo offers to install it, eject the image and move the `.dmg` to the Trash.
+
+### Dynamic Island
+A panel around the notch — or a simulated notch on Macs and displays without one — that grows on hover and opens on click.
+- **Now playing** from any player, with artwork, a scrubber, playback controls, an optional live equalizer and synced lyrics.
+- **Live activities** beside the notch: music, timer, screen recording and download progress; finished downloads land on the shelf.
+- **Tabs:** music and timer, calendar with a meeting heads-up five minutes before and a Join button, notifications, the files shelf, a scratchpad, AI agent limits and a camera mirror.
+- Optional haptic feedback, and a toggle on ⌃⌥⌘N.
 
 ### Everyday tools
-- **Dynamic Island** around the notch (or a simulated one): any player's now playing with artwork and scrubbing, optional live equalizer and synced lyrics, timers, calendar with Join buttons, downloads, notifications, a files shelf, notes, AI agents and a camera mirror.
-- **Command Bar** (⌥Space): apps, files, windows, menu commands, clipboard, snippets, calculator, units, emoji, your own scripts and every Lumo action.
-- **Quick panel** (⌃⌘V) and a **radial menu** with profiles and folders.
-- **Notes** in a floating scratchpad, **AI agents** (Claude Code, Codex, OpenCode, Copilot) with plan limits, API value and a finished-task heads-up, and a **cleaning mode** that locks the keyboard.
-- **Quick toggles:** Dark Mode, desktop icons, hidden files, eject disks, sleep display, lock, empty Trash.
+- **Command Bar** on ⌥Space: one field for apps, files, windows, menu commands of the front app, clipboard history, snippets, a calculator, unit conversion, emoji, your own shell scripts and every Lumo action.
+- **Quick panel** on ⌃⌘V: a palette of favorite Lumo actions in the middle of the screen.
+- **Radial menu** on ⌃⌥⌘R: a wheel around the pointer with folders and per-app profiles.
+- **Notes** in a floating scratchpad that stays on top (⌃⌥⌘;).
+- **AI agents.** Token use for Claude Code, Codex, OpenCode and Copilot by day and project, Claude and Codex plan limits, the API value of your usage, and a heads-up when an agent worked for two minutes and went quiet.
+- **Cleaning mode** locks the keyboard and media keys so you can wipe them; the mouse stays free to press "Done".
+- **Quick toggles:** Dark Mode, desktop icons, hidden files, eject all disks, sleep the display, lock the screen, empty the Trash.
 
 ### Capture
-- **Lumo selector** with a mode bar and a pixel loupe: area, window, screen, **scrolling screenshots**, recording, text and color.
-- **Screenshot editor** with arrows, boxes, highlighter, redaction, crop, backgrounds, watermark, Share menu and 24-hour links.
-- **Screen recording** with separate system audio and microphone tracks; an editor to trim, cut, blur and auto-zoom on clicks; MP4 and GIF.
-- **Text and QR from the screen**, a **color picker**, pinned images, a **camera mirror** and **media tools** to compress video, convert images and pull text out of them.
+- **Lumo selector** (⌃⇧1–5) with a mode bar and a pixel loupe: area, window, full screen, **scrolling screenshots**, recording, text and color.
+- **Screenshot editor:** arrows, boxes, highlighter, redaction, crop, backgrounds, a watermark, the Share menu, save to the Desktop and a 24-hour link.
+- **Screen recording** of an area, a window or the whole screen, with the pointer, system audio and the microphone on separate tracks.
+- **Recording editor:** trim the ends, cut a section, blur an area, auto-zoom on clicks, then save as MP4 or GIF or share a 24-hour link.
+- **Text and QR codes** from anything on screen, a **color picker** with formats and recent colors, pinned screenshots and a **camera mirror** to check yourself before a call.
+- **Media tools:** compress video to HEVC 1080p or 720p, make GIFs, convert and resize images with an optional watermark, and pull text out of them — all on this Mac, saved next to the originals.
 
 ### Energy and displays
-- **Stay awake** on a timer, while chosen apps run, while plugged in or with an external display — and with the lid closed.
-- **Displays:** brightness for every screen (DDC/CI for external monitors), ½ and ¼ steps for the brightness keys, dimming below the minimum and XDR extra brightness on displays that have the headroom.
-- **Bluetooth off during sleep**, back on at wake.
+- **Stay awake** until you stop it, on a timer, while chosen apps are open, while plugged in or while an external display is connected — and with the lid closed.
+- **Displays:** brightness for every screen including external monitors over DDC/CI, ½ and ¼ steps for the brightness keys, dimming below the minimum and XDR extra brightness on displays with HDR headroom.
+- **Bluetooth off during sleep** and back on at wake — only if Lumo was the one that turned it off.
 
 ### Install only what you use
-Remove any feature on the **Features** page — it stops running and leaves the panel; adding it back restores its settings. Pick a preset, reorder sections, use a compact grid, and export your settings to another Mac. The **Permissions** page shows what each permission is for, which of your features use it, and when one is no longer needed.
+Remove any feature on the **Features** page — it stops running and leaves the panel; adding it back restores its settings. Start from a preset (Essentials, Power user or Everything), reorder or hide sections, switch to a compact three-per-row grid, and export your settings to another Mac. The **Permissions** page shows what each permission is for, which of your features use it, and when one is no longer needed so you can revoke it.
+
+### Default shortcuts
+
+| Action | Shortcut |
+|---|---|
+| Window halves | ⌃⌥ ← → ↑ ↓ |
+| Window quarters | ⌃⌥ U · I · J · K |
+| Window thirds | ⌃⌥ D · F · G |
+| Maximize · center · restore | ⌃⌥ ↩ · ⌃⌥ C · ⌃⌥ ⌫ |
+| Next display | ⌃⌥⌘ → |
+| Capture area · window · text · color · record | ⌃⇧ 1 · 2 · 3 · 4 · 5 |
+| Command Bar | ⌥ Space |
+| Clipboard history · paste as plain text | ⇧⌘V · ⌥⇧⌘V |
+| Quick panel | ⌃⌘V |
+| Radial menu · shelf · notes | ⌃⌥⌘ R · S · ; |
+| Next output · mute microphones | ⌃⌥⌘ O · M |
+| Dynamic Island | ⌃⌥⌘ N |
+
+All of them can be changed or turned off on the **Shortcuts** page.
 
 ## Private by default
 
@@ -136,11 +179,3 @@ The script runs the tests, builds a universal release binary and the two small h
 ## License
 
 [MIT](LICENSE) © 2026 [Leidone](https://github.com/Leidone). The license covers the source code; the Lumo name and icon are covered by [TRADEMARKS.md](TRADEMARKS.md). Third-party services and system frameworks are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
----
-
-### По-русски
-
-Lumo — приложение в строке меню, которое держит Mac быстрым и заменяет десяток мелких утилит: оптимизатор и очистка, датчики и сеть, микшер громкости, Dynamic Island, управление окнами и Dock, история буфера, захват и запись экрана, Command Bar, яркость мониторов и многое другое. Всё выключено, пока вы сами не включите; каждая функция просит только нужные ей разрешения. Интерфейс на русском и английском.
-
-**Установка:** скачайте `Lumo.dmg` из [Releases](../../releases), перетащите Lumo в «Программы», при первом запуске нажмите «Всё равно открыть» в «Системные настройки → Конфиденциальность и безопасность».
