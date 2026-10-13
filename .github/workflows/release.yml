@@ -1,0 +1,35 @@
+name: Release
+
+# Builds Lumo.dmg on a clean runner and attaches it to the release for the given tag.
+# Run it from the Actions tab after pushing a tag (for example v1.0.1).
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag, e.g. v1.0.1
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  dmg:
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+      - name: Toolchain
+        run: sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -1)"
+      - name: Build the DMG
+        run: ./scripts/build_dmg.sh
+      - name: Checksum
+        run: shasum -a 256 build/Lumo.dmg | tee build/Lumo.dmg.sha256
+      - name: Attach to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "${{ inputs.tag }}" >/dev/null 2>&1 \
+            || gh release create "${{ inputs.tag }}" --draft --title "Lumo ${{ inputs.tag }}" --notes-file CHANGELOG.md
+          gh release upload "${{ inputs.tag }}" build/Lumo.dmg build/Lumo.dmg.sha256 --clobber

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Troubleshooting
+    url: https://github.com/Leidone/lumo/blob/main/docs/TROUBLESHOOTING.md
+    about: Common fixes for permissions, shortcuts and the first launch.
+  - name: Report a security problem
+    url: https://github.com/Leidone/lumo/security/advisories/new
+    about: Please report vulnerabilities privately.

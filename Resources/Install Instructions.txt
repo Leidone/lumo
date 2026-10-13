@@ -1,0 +1,70 @@
+LUMO 1.0.0 — MAC OPTIMIZER AND EVERYDAY TOOLS
+Installation guide
+
+Requirements: macOS 14 Sonoma or later. Works on Apple Silicon and Intel Macs.
+
+
+1. INSTALL
+
+   Drag "Lumo" onto the "Applications" folder shortcut in this window.
+
+
+2. FIRST LAUNCH (one time only)
+
+   Lumo is not signed with a paid Apple Developer certificate, so macOS
+   blocks it the first time with a message like
+   "Apple could not verify Lumo is free of malware".
+   This is expected for apps distributed outside the App Store.
+
+   a) Open Lumo from the Applications folder.
+   b) When the warning appears, click "Done".
+   c) Open System Settings → Privacy & Security.
+   d) Scroll down and click "Open Anyway" next to the Lumo message,
+      then confirm with your password or Touch ID.
+
+   Lumo opens normally from then on.
+
+   Don't see "Open Anyway"? Run this in Terminal instead:
+
+       xattr -dr com.apple.quarantine /Applications/Lumo.app
+
+
+3. USING LUMO
+
+   Lumo lives in the menu bar (top-right corner of the screen) — there is
+   no Dock icon. Look for two blue rings: the outer ring is CPU load,
+   the inner ring is memory.
+
+   • Left-click the rings to open Lumo.
+   • Right-click for a quick menu: "Optimize now" and "Quit Lumo".
+   • Switch the language to English: Settings tab → Language → English.
+
+
+   • Everything else lives on the Tools tab. Every tool is OFF until you
+     turn it on.
+
+
+4. PERMISSIONS
+
+   Some tools need macOS permissions (Accessibility, Screen Recording…).
+   Tools → Permissions explains each one and which of your tools use it.
+   After installing a new version, macOS may forget them: remove Lumo
+   from the list in System Settings and add it again.
+
+
+5. SAFE BY DEFAULT
+
+   • System processes, other users' processes and anything started from
+     Terminal are never touched.
+   • The app you're currently using is never closed.
+   • Apps are closed like ⌘Q, so you can still save your documents.
+   • Closing apps, cleaning caches and purging RAM are all OFF until you
+     turn them on in Settings.
+
+
+6. UNINSTALL
+
+   Quit Lumo (right-click the menu bar icon → Quit Lumo) and move
+   /Applications/Lumo.app to the Trash.
+   If you enabled "No password", turn it off in Settings first
+   (or run: sudo rm /etc/sudoers.d/lumo).

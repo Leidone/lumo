@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>ru</string>
+	<key>CFBundleDisplayName</key>
+	<string>Lumo</string>
+	<key>CFBundleExecutable</key>
+	<string>Lumo</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
+	<key>CFBundleIdentifier</key>
+	<string>app.lumo.optimizer</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Lumo</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	<key>CFBundleVersion</key>
+	<string>6</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>14.0</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Lumo switches Dark Mode and empties the Trash only when you tap those quick actions.</string>
+	<key>NSAudioCaptureUsageDescription</key>
+	<string>Lumo adjusts the volume of apps you choose in the mixer. Audio never leaves your Mac.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Lumo turns Bluetooth off during sleep and back on at wake, only if you enable it.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Lumo shows your next meetings in the Dynamic Island. Events never leave your Mac.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Lumo shows a camera mirror only while you open it.</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>Lumo shows download progress in the Dynamic Island.</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Lumo — оптимизация Mac</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Lumo records your microphone only while you record the screen with the microphone option on.</string>
+</dict>
+</plist>

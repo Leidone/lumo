@@ -1,0 +1,59 @@
+name: Bug report
+description: Something in Lumo doesn't work as it should
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time! Please check [Troubleshooting](https://github.com/Leidone/lumo/blob/main/docs/TROUBLESHOOTING.md) first.
+        Security problems go through [SECURITY.md](https://github.com/Leidone/lumo/blob/main/SECURITY.md), not here.
+  - type: input
+    id: feature
+    attributes:
+      label: Feature
+      description: Which tool is affected (for example Dynamic Island, Window layout, Cleaner)?
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Turn on …
+        2. Press …
+        3. See …
+    validations:
+      required: true
+  - type: input
+    id: lumo
+    attributes:
+      label: Lumo version
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and Mac model
+      placeholder: "macOS 26.6, MacBook Air M3"
+    validations:
+      required: true
+  - type: checkboxes
+    id: permissions
+    attributes:
+      label: Permissions granted to Lumo
+      options:
+        - label: Accessibility
+        - label: Screen & System Audio Recording
+        - label: Full Disk Access
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or anything else

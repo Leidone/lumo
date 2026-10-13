@@ -1,0 +1,7 @@
+# Lumo has no package dependencies; keep the CI actions themselves up to date.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
