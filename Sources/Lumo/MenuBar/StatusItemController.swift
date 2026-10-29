@@ -119,7 +119,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     // MARK: Rendering
 
     private func modelChanged() {
-        iconView.setAnimated(model.animateIcon && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+        iconView.setAnimated(model.animateIcon && !model.isSavingPower && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
         iconView.setBusy(model.isOptimizing)
         iconView.setValues(cpu: model.cpuLoad, memory: model.memory.fraction)
         iconView.setHealth(Palette.health(model.healthLoad))

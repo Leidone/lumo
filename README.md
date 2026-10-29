@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="../../releases"><img src="https://img.shields.io/badge/release-1.0.0-4c7dff" alt="Release 1.0.0"></a>
+  <a href="../../releases"><img src="https://img.shields.io/badge/release-1.0.1-4c7dff" alt="Release 1.0.1"></a>
   <img src="https://img.shields.io/badge/macOS-14%2B-0b1230" alt="macOS 14 and newer">
   <img src="https://img.shields.io/badge/Apple%20silicon%20%2B%20Intel-universal-5e5ce6" alt="Universal binary">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-8e9bff" alt="MIT license"></a>

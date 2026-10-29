@@ -89,6 +89,7 @@ struct MixerPage: View {
         .onAppear {
             mixer.refresh()
             let timer = Timer(timeInterval: 2, repeats: true) { _ in MainActor.assumeIsolated { mixer.refresh() } }
+            timer.tolerance = 0.5
             RunLoop.main.add(timer, forMode: .common)
             refreshTimer = timer
         }

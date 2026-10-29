@@ -41,4 +41,13 @@ struct SystemExtrasTests {
         #expect(curve.rpm(at: 120, min: 1200, max: 6000) == 6000)
     }
 
+    @Test("sampling slows down in the background, more on battery and in Low Power Mode")
+    func sampleCadence() {
+        #expect(SampleCadence.interval(foreground: true, liveReadouts: false, onBattery: true, lowPowerMode: true) == 2)
+        #expect(SampleCadence.interval(foreground: false, liveReadouts: true, onBattery: false, lowPowerMode: false) == 2)
+        #expect(SampleCadence.interval(foreground: false, liveReadouts: true, onBattery: true, lowPowerMode: false) == 3)
+        #expect(SampleCadence.interval(foreground: false, liveReadouts: false, onBattery: false, lowPowerMode: false) == 3)
+        #expect(SampleCadence.interval(foreground: false, liveReadouts: false, onBattery: true, lowPowerMode: false) == 6)
+        #expect(SampleCadence.interval(foreground: false, liveReadouts: false, onBattery: false, lowPowerMode: true) == 10)
+    }
 }

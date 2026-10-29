@@ -304,6 +304,7 @@ private struct EnergyList: View {
         .onAppear {
             energy.refresh()
             let timer = Timer(timeInterval: 5, repeats: true) { _ in MainActor.assumeIsolated { energy.refresh() } }
+            timer.tolerance = 1
             RunLoop.main.add(timer, forMode: .common)
             self.timer = timer
         }
@@ -497,7 +498,7 @@ struct ReadoutsPage: View {
                 Divider().opacity(0.4)
                 SettingToggle(symbol: "sparkles", colors: [Palette.purple.color, Palette.pink.color],
                               title: t("Анимация иконки", "Icon animation"),
-                              subtitle: t("Переливы и пульс", "Shimmer and pulse"), isOn: $model.animateIcon)
+                              subtitle: t("Переливы и пульс · на паузе от батареи", "Shimmer and pulse · paused on battery"), isOn: $model.animateIcon)
             }
             .appear(order: 3).scrollFade()
         }

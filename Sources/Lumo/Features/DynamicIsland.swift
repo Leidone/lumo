@@ -76,6 +76,10 @@ final class DynamicIsland: NSObject, ObservableObject {
     let notifications = NotificationFeed()
     /// AudioLevelMeter on macOS 14.2+, kept untyped so the class stays available on 14.0.
     private var meter: AnyObject?
+    private var meterActivity: AnyCancellable?
+    private var wakeObservers: [NSObjectProtocol] = []
+    /// False while the displays sleep or another user is active: nothing on screen to animate.
+    private var screensAwake = true
     private var cancellables: Set<AnyCancellable> = []
     private var serviceTimer: Timer?
     private var announcedEvents: Set<String> = []
@@ -246,15 +250,52 @@ final class DynamicIsland: NSObject, ObservableObject {
     }
 
     /// The live equalizer listens to system audio only while something plays and the option is on.
+    /// It also needs real output somewhere (a paused player can still claim to play) and awake screens.
     private func updateMeter() {
-        let wanted = isEnabled && liveEqualizer && nowPlaying.track?.state.isPlaying == true
+        let enabled = isEnabled && liveEqualizer
+        watchAudioActivity(enabled)
+        let wanted = enabled && screensAwake && nowPlaying.track?.state.isPlaying == true
+            && AudioActivity.shared.isAnythingPlaying
         guard #available(macOS 14.2, *) else { return }
         if wanted, meter == nil {
             let fresh = AudioLevelMeter()
-            if fresh.start() { meter = fresh }
+            guard fresh.start() else { return }
+            meter = fresh
+            objectWillChange.send()
         } else if !wanted, let current = meter as? AudioLevelMeter {
             current.stop()
             meter = nil
+            objectWillChange.send()
+        }
+    }
+
+    private func watchAudioActivity(_ on: Bool) {
+        guard on != (meterActivity != nil) else { return }
+        if on {
+            AudioActivity.shared.retain()
+            meterActivity = AudioActivity.shared.$playing.dropFirst().removeDuplicates()
+                .sink { [weak self] _ in DispatchQueue.main.async { self?.updateMeter() } }
+            observeScreenWake()
+        } else {
+            meterActivity = nil
+            AudioActivity.shared.release()
+        }
+    }
+
+    private func observeScreenWake() {
+        guard wakeObservers.isEmpty else { return }
+        let center = NSWorkspace.shared.notificationCenter
+        let changes: [(Notification.Name, Bool)] = [
+            (NSWorkspace.screensDidSleepNotification, false), (NSWorkspace.screensDidWakeNotification, true),
+            (NSWorkspace.sessionDidResignActiveNotification, false), (NSWorkspace.sessionDidBecomeActiveNotification, true),
+        ]
+        wakeObservers = changes.map { name, awake in
+            center.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated {
+                    self?.screensAwake = awake
+                    self?.updateMeter()
+                }
+            }
         }
     }
 
@@ -267,6 +308,7 @@ final class DynamicIsland: NSObject, ObservableObject {
     func shutdown() {
         if #available(macOS 14.2, *) { (meter as? AudioLevelMeter)?.stop() }
         meter = nil
+        watchAudioActivity(false)
         nowPlaying.stop()
     }
 
@@ -311,6 +353,8 @@ final class DynamicIsland: NSObject, ObservableObject {
 
     private func updateMouseHandling(at point: CGPoint, dragging: Bool = false) {
         guard let panel else { return }
+        // Most pointer movement happens far from the notch: skip it while nothing is pending.
+        if !isExpanded, !dragging, hoverWork == nil, panel.ignoresMouseEvents, !panel.frame.contains(point) { return }
         // Dragging something onto the notch opens the shelf straight away.
         if dragging, !isExpanded, enabledTabs.contains(.files), shapeRect(for: mode).insetBy(dx: -10, dy: -6).contains(point) {
             tab = .files

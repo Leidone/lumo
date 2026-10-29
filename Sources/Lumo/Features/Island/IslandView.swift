@@ -205,6 +205,7 @@ final class EqualizerLayerView: NSView {
     private var bars: [CALayer] = []
     private var levelTimer: Timer?
     private var source: (() -> [Float])?
+    private var occlusionObserver: NSObjectProtocol?
 
     init() {
         super.init(frame: NSRect(x: 0, y: 0, width: 16, height: 14))
@@ -247,19 +248,40 @@ final class EqualizerLayerView: NSView {
             return
         }
         source = next
-        levelTimer?.invalidate()
-        levelTimer = nil
         if next == nil {
             for (index, bar) in bars.enumerated() {
                 bar.setAffineTransform(.identity)
                 bar.add(Self.pulse(index), forKey: "pulse")
             }
-            return
+        } else {
+            bars.forEach { $0.removeAnimation(forKey: "pulse") }
         }
-        bars.forEach { $0.removeAnimation(forKey: "pulse") }
+        updateLevelTimer()
+    }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        occlusionObserver.map(NotificationCenter.default.removeObserver)
+        occlusionObserver = nil
+        if let window {
+            occlusionObserver = NotificationCenter.default.addObserver(
+                forName: NSWindow.didChangeOcclusionStateNotification, object: window, queue: .main
+            ) { [weak self] _ in MainActor.assumeIsolated { self?.updateLevelTimer() } }
+        }
+        updateLevelTimer()
+    }
+
+    /// Reads levels only while there is a source and the island is actually visible.
+    private func updateLevelTimer() {
+        let wanted = source != nil && window?.occlusionState.contains(.visible) == true
+        guard wanted != (levelTimer != nil) else { return }
+        levelTimer?.invalidate()
+        levelTimer = nil
+        guard wanted else { return }
         let timer = Timer(timeInterval: 1.0 / 30, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.applyLevels() }
         }
+        timer.tolerance = 0.005
         RunLoop.main.add(timer, forMode: .common)
         levelTimer = timer
     }

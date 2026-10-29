@@ -1,9 +1,11 @@
 import AppKit
 import AudioToolbox
+import Combine
 import CoreAudio
 
 /// Per-app volume (with boost past 100%) and per-app output device, using CoreAudio process taps.
-/// A tap exists only for apps the user has adjusted; everything else plays untouched.
+/// A tap exists only for apps the user has adjusted, and only while they actually play:
+/// a running tap keeps the output device (and a Bluetooth link) busy, so idle apps get none.
 @MainActor
 final class VolumeMixer: ObservableObject {
     struct Channel: Identifiable, Equatable {
@@ -26,6 +28,8 @@ final class VolumeMixer: ObservableObject {
     private static let enabledKey = "mixer.enabled"
     private static let pinnedKey = "mixer.pinned"
     static let maxVolume = 2.0
+    /// How long a silent app keeps its tap, so pauses between tracks don't rebuild it.
+    private static let idleGrace: TimeInterval = 5
 
     @Published var isEnabled: Bool { didSet { store.set(isEnabled, forKey: Self.enabledKey); refresh() } }
     @Published private(set) var channels: [Channel] = []
@@ -38,6 +42,8 @@ final class VolumeMixer: ObservableObject {
     private let store: UserDefaults
     private var settings: [String: Setting]
     private var taps: [AudioObjectID: TapHandle] = [:]
+    private var idleRemovals: [AudioObjectID: DispatchWorkItem] = [:]
+    private var activity: AnyCancellable?
 
     init(store: UserDefaults) {
         self.store = store
@@ -48,6 +54,7 @@ final class VolumeMixer: ObservableObject {
 
     /// Re-reads audio processes and devices, and (re)applies remembered settings.
     func refresh() {
+        watchActivity(isEnabled)
         devices = AudioHW.outputDevices()
         defaultOutputUID = AudioHW.deviceUID(AudioHW.defaultOutputDevice())
         guard isEnabled else {
@@ -117,7 +124,23 @@ final class VolumeMixer: ObservableObject {
         refresh()
     }
 
-    func shutdown() { removeAllTaps() }
+    func shutdown() {
+        watchActivity(false)
+        removeAllTaps()
+    }
+
+    /// Playback starting or stopping anywhere re-applies the settings, so taps follow it.
+    private func watchActivity(_ on: Bool) {
+        guard on != (activity != nil) else { return }
+        if on {
+            AudioActivity.shared.retain()
+            activity = AudioActivity.shared.$playing.dropFirst().removeDuplicates()
+                .sink { [weak self] _ in DispatchQueue.main.async { self?.refresh() } }
+        } else {
+            activity = nil
+            AudioActivity.shared.release()
+        }
+    }
 
     // MARK: Taps
 
@@ -135,6 +158,8 @@ final class VolumeMixer: ObservableObject {
     private func apply(_ channel: Channel) {
         let needsTap = abs(channel.volume - 1) > 0.01 || channel.deviceUID != nil
         guard needsTap else { return removeTap(channel.processObject) }
+        guard channel.isPlaying else { return scheduleIdleRemoval(channel.processObject) }
+        idleRemovals.removeValue(forKey: channel.processObject)?.cancel()
         if let tap = taps[channel.processObject] {
             tap.gain = Float(channel.volume)
             return
@@ -154,11 +179,21 @@ final class VolumeMixer: ObservableObject {
         }
     }
 
+    private func scheduleIdleRemoval(_ object: AudioObjectID) {
+        guard taps[object] != nil, idleRemovals[object] == nil else { return }
+        let work = DispatchWorkItem { [weak self] in MainActor.assumeIsolated { self?.removeTap(object) } }
+        idleRemovals[object] = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.idleGrace, execute: work)
+    }
+
     private func removeTap(_ object: AudioObjectID) {
+        idleRemovals.removeValue(forKey: object)?.cancel()
         taps.removeValue(forKey: object)?.stop()
     }
 
     private func removeAllTaps() {
+        idleRemovals.values.forEach { $0.cancel() }
+        idleRemovals = [:]
         taps.values.forEach { $0.stop() }
         taps = [:]
     }

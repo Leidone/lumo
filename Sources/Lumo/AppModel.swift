@@ -49,7 +49,6 @@ final class AppModel: ObservableObject {
     }
 
     static let autoThresholdRange = 0.1...1.0
-    private static let sampleInterval: TimeInterval = 2
 
     // MARK: Live state
 
@@ -252,16 +251,34 @@ final class AppModel: ObservableObject {
         mixer.refresh()
         applyLanguage()
         sample()
-        let timer = Timer(timeInterval: Self.sampleInterval, repeats: true) { [weak self] _ in
+        scheduleSampling()
+    }
+
+    /// On battery or in Low Power Mode Lumo samples less often and keeps the menu bar icon still.
+    var isSavingPower: Bool {
+        (snapshot.battery.map { !$0.isPluggedIn } ?? false) || ProcessInfo.processInfo.isLowPowerModeEnabled
+    }
+
+    /// Re-arms the sample timer when the right cadence changes (popover, readouts, power source).
+    private func scheduleSampling() {
+        let interval = SampleCadence.interval(
+            foreground: isPopoverVisible || sensorsVisible || island.isExpanded,
+            liveReadouts: !readouts.isEmpty,
+            onBattery: snapshot.battery.map { !$0.isPluggedIn } ?? false,
+            lowPowerMode: ProcessInfo.processInfo.isLowPowerModeEnabled)
+        guard sampleTimer?.timeInterval != interval else { return }
+        sampleTimer?.invalidate()
+        let timer = Timer(timeInterval: interval, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.sample() }
         }
-        timer.tolerance = 0.5
+        timer.tolerance = interval / 4
         RunLoop.main.add(timer, forMode: .common)
         sampleTimer = timer
     }
 
     func setPopoverVisible(_ visible: Bool) {
         isPopoverVisible = visible
+        scheduleSampling()
         guard visible else { return }
         refreshProcesses()
         refreshPorts()
@@ -290,6 +307,7 @@ final class AppModel: ObservableObject {
         if autoEnabled, !isOptimizing, trigger.feed(load: systemLoad, now: now) {
             optimize(automatic: true)
         }
+        scheduleSampling()
     }
 
     private func observeSystem() {

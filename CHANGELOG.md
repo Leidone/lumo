@@ -2,6 +2,20 @@
 
 All notable changes to Lumo are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] — 2026-10-29
+
+### Summary
+A battery release. Lumo no longer keeps audio running in the background and wakes the Mac less often, especially on battery.
+
+### Fixed
+- The volume mixer kept a per-app audio tap running for as long as the app existed, even in silence, so the output device and Bluetooth headphones could never idle. Taps now start when the app plays and stop five seconds after it goes quiet; playback changes are pushed by CoreAudio instead of polled.
+- The island's live equalizer listened to system audio whenever a player claimed to be playing. It now runs only while sound actually plays and the screens are awake, and its level updates pause while the island is hidden.
+
+### Changed
+- Background sampling adapts: every 2 s while Lumo's panel, sensors or the expanded island are open, 3 s otherwise, 6 s on battery and 10 s in Low Power Mode.
+- The menu bar icon's shimmer and pulse pause on battery and in Low Power Mode.
+- Pointer movement far from the notch is ignored without any work, the clipboard is checked once a second, and every repeating timer allows the system to coalesce wakeups.
+
 ## [1.0.0] — 2026-10-13
 
 ### Summary
@@ -50,4 +64,5 @@ The first public release. Lumo keeps your Mac fast from the menu bar and bundles
 - Permissions page explaining every permission and flagging the ones no longer needed.
 - A deep navy design with Liquid Glass on macOS 26, English and Russian interface, about 0.1% CPU when idle.
 
+[1.0.1]: https://github.com/Leidone/lumo/releases/tag/v1.0.1
 [1.0.0]: https://github.com/Leidone/lumo/releases/tag/v1.0.0

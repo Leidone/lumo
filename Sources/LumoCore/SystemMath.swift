@@ -63,3 +63,17 @@ public enum CachePolicy {
         return !runningBundleIDs.contains { $0.lowercased() == lowered }
     }
 }
+
+/// How often the monitors sample. Fast while someone looks at the numbers; in the background
+/// slower, and slower still on battery or in Low Power Mode, so Lumo wakes the CPU less.
+public enum SampleCadence {
+    public static let foreground: TimeInterval = 2
+
+    public static func interval(foreground: Bool, liveReadouts: Bool, onBattery: Bool, lowPowerMode: Bool) -> TimeInterval {
+        if foreground { return Self.foreground }
+        let saving = onBattery || lowPowerMode
+        if liveReadouts { return saving ? 3 : Self.foreground }
+        if lowPowerMode { return 10 }
+        return onBattery ? 6 : 3
+    }
+}
